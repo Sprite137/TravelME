@@ -1,11 +1,9 @@
-<script setup>
-  import HelloWorld from './components/HelloWorld.vue'
-  import MapContrainer from "./components/MapContainer.vue"
-</script>
-
 <template>
-    <MapContrainer></MapContrainer>
+    <RouterView></RouterView>
 </template>
+
+<script setup>
+</script>
 
 <style scoped>
   /* .logo {
