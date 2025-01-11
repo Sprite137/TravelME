@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.StationInfoMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.entity.pojo.StationInfo">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="stationName" column="station_name" jdbcType="VARCHAR"/>
+        <result property="lat" column="lat" jdbcType="VARCHAR"/>
+        <result property="lng" column="lng" jdbcType="VARCHAR"/>
+        <result property="ICAO" column="ICAO" jdbcType="VARCHAR"/>
+        <result property="gCity" column="g_city" jdbcType="VARCHAR"/>
+        <result property="gCode" column="g_code" jdbcType="VARCHAR"/>
+        <result property="isAirStation" column="is_airStation" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <insert id="insertStationInfo">
+        insert into station_info(station_name,lat, lng, g_city, g_code) values (#{stationName},#{lat}, #{lng}, #{gCity}, #{gCode});
+    </insert>
+
+    <insert id="insertAirStationInfo">
+        insert into station_info(station_name,lat,lng,ICAO) values (#{stationName},#{lat}, #{lng}, #{ICAO});
+    </insert>
+
+
+    <select id="getStationInfo" resultMap="BaseResultMap">
+        select * from station_info WHERE (
+            CASE
+                WHEN is_airStation = 0 THEN station_name
+                ELSE ICAO
+            END
+        ) = #{station};
+    </select>
+</mapper>

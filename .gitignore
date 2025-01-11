@@ -1,0 +1,6 @@
+/.idea
+/TravelMeBackend/.idea
+/TravelMeBackend/target
+/travelMeFront/.vscode
+/travelMeFront/node_modules
+/travelMeFront/src/assets/json/GDkey.json
