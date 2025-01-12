@@ -2,6 +2,9 @@ package org.example.entity.dto;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 /**
  * @author sprite-pc
  * @description:
@@ -22,4 +25,6 @@ public class TravelLatLngDto {
     String endStationLng;
 
     int isAirPlane;
+
+    Timestamp travelTime;
 }

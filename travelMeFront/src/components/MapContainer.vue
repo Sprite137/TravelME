@@ -1,6 +1,11 @@
 
 <template>
     <div id="container"></div>
+    <!-- <div>
+      <div>出发站：南京</div>
+      <div>终点站：北京</div>
+      <div>出行时间：2024-12-17</div>
+    </div> -->
 </template>
 
 
@@ -8,11 +13,14 @@
   import { onMounted, onUnmounted } from "vue";
   import AMapLoader from "@amap/amap-jsapi-loader";
   import GDKey from "../assets/json/GDKey.json"
-  import station_lnglat from "../assets/json/station_lnglat.json"
   import {test} from "../api/travelLog"
+  import {TravelLog} from "../base"
 
   let map = null;
+  var infoWindow;
 
+  
+  
   onMounted(() => {
     window._AMapSecurityConfig = {
       securityJsCode: GDKey.securityJsCode,
@@ -104,6 +112,24 @@
           return [(a+c)/2-(d-b)/3,(b+d)/2+(c-a)/3]
         }
 
+        function openInfo(e) {
+          //构建信息窗体中显示的内容
+          var info = [];
+          // info.push("<div class='input-card content-window-card'><div><img style=\"float:left;\" src=\" https://webapi.amap.com/images/autonavi.png \"/></div> ");
+          // info.push("<div style=\"padding:7px 0px 0px 0px;\"><h4>高德软件</h4>"+Object.values(travelLog));
+          // info.push("<p class='input-item'></p>");
+          // info.push("<p class='input-item'>地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>");
+          info.push("<div> 出发站： "+ e.target.getExtData()["startStation"]+" </div>")
+          info.push("<div> 终点站：" + e.target.getExtData()["endStation"]+" </div>")
+          info.push("<div> 出行时间： "+ e.target.getExtData()["travelTime"]+" </div>")
+
+          infoWindow = new AMap.InfoWindow({
+              content: info.join("")  //使用默认信息窗体框样式，显示信息内容
+          });
+
+          infoWindow.open(map, [e.lnglat.getLng(),e.lnglat.getLat()]);
+        }
+
        
 
       // var points = [
@@ -113,6 +139,10 @@
 
       var points = new Array();
       var isAirPlanes = new Array();
+      var travelLogs = new Array();
+      {
+            
+          }
       async function testAxios() {
         try{
             const response = await test();
@@ -123,6 +153,12 @@
               point[2] =  Number(response.data[key].endStationLng);
               point[3] =  Number(response.data[key].endStationLat);
               points[key] = point;
+              var travelLog = {
+                  "startStation":response.data[key].startStation,
+                  "endStation":response.data[key].endStation,
+                  "travelTime":response.data[key].travelTime.slice(0, 10),
+              }
+              travelLogs[key] = travelLog;
               isAirPlanes[key] = response.data[key].isAirPlane;
             }
           }
@@ -131,12 +167,24 @@
           }
         };
 
+      function showTravelLog(e){
+        var x = e.target.getExtData();
+        // console.log()
+        // alert("hello!"+Object.values(x))
+        openInfo(e)
+      }
+
+      function hideTravelLog(e){
+        var x = e.target.getExtData();
+        // console.log(x.key["startStation"])
+        // alert("hello!"+Object.values(x))
+        infoWindow.close()
+      }
+
       testAxios();
 
       setTimeout(() => {
-        console.log(points,points.length)
         
-
         for(var i = 0; i<points.length; i++){
           var startPoint = [[points[i][0], points[i][1]]]; //起点
           var endPoint = [ //一次贝塞尔曲线
@@ -153,12 +201,19 @@
 
           var bezierCurve = new AMap.BezierCurve({
             path: path, //曲线路径
-            strokeWeight: 1, //线条宽度
+            strokeWeight: 2, //线条宽度
             strokeColor: "#87CEFA", //线条颜色
             isOutline: true, //是否描边
             outlineColor: isAirPlanes[i]===1?"blue":"green", //描边颜色
-            borderWeight: 1, //描边宽度
+            borderWeight: 2, //描边宽度
+            showDir:true,
+            cursor:"help"
           });
+
+          bezierCurve.on("mouseover",showTravelLog)
+          bezierCurve.on("mouseout",hideTravelLog)
+          
+          bezierCurve.setExtData(travelLogs[i])
 
           map.add(bezierCurve);
           map.add(new AMap.Circle({
@@ -219,6 +274,8 @@
     top: 0px;
     width: 100%;
     height: 100%;
+    z-index: 10;
     
   }
+
 </style>

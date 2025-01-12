@@ -3,6 +3,7 @@ package org.example.entity.pojo;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -24,13 +25,13 @@ public class TravelLog {
 
     int isDel;
 
-    Date createTime;
+    Timestamp createTime;
 
     String createBy;
 
-    Date updateTime;
+    Timestamp updateTime;
 
     String updateBy;
 
-    Date travelTime;
+    Timestamp travelTime;
 }

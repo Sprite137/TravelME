@@ -11,15 +11,15 @@
         <result property="endStation" column="end_station" jdbcType="VARCHAR"/>
         <result property="isAirPlane" column="is_airPlane" jdbcType="TINYINT"/>
         <result property="isDel" column="is_del" jdbcType="TINYINT"/>
-        <result property="createTime" column="create_time" jdbcType="TIME"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
-        <result property="updateTime" column="update_time" jdbcType="DATE"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
-        <result property="travelTime" column="travel_time" jdbcType="DATE"/>
+        <result property="travelTime" column="travel_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="getTravelLogsByUserId" resultMap="BaseResultMap">
-        select * from travel_log where user_id = #{userId};
+        select * from travel_log where user_id = #{userId} and is_del=0;
     </select>
 
 
