@@ -3,10 +3,7 @@ package org.example.controller;
 import org.example.entity.ResponseResult;
 import org.example.service.StationInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author sprite-pc
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/stationInfo")
+@CrossOrigin
 public class StationInfoController {
 
     @Autowired
@@ -30,5 +28,10 @@ public class StationInfoController {
 //        stationInfoService.insertStationInfo();
         stationInfoService.insertAirStationInfo();
         return ResponseResult.SuccessResult("hello, insert success!");
+    }
+
+    @GetMapping("/findRecommendStationsByName")
+    public ResponseResult findRecommendStationByName(@RequestParam("stationName") String stationName,@RequestParam("isAirStation") Integer isAirStation) {
+        return stationInfoService.findRecommendStationsByName(stationName,isAirStation);
     }
 }

@@ -17,6 +17,9 @@
         <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
         <result property="travelTime" column="travel_time" jdbcType="TIMESTAMP"/>
     </resultMap>
+    <insert id="insertTravelLog">
+        insert into travel_log (user_id,start_station,end_station,is_airPlane,create_time,update_time,travel_time,is_del) values(#{userId},#{startStation},#{endStation},#{isAirPlane},now(),now(),#{travelTime},0);
+    </insert>
 
     <select id="getTravelLogsByUserId" resultMap="BaseResultMap">
         select * from travel_log where user_id = #{userId} and is_del=0;

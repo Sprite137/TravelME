@@ -2,14 +2,18 @@ package org.example.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import org.example.entity.ResponseResult;
+import org.example.entity.dto.RecommendStationInfoDto;
 import org.example.entity.pojo.AirStationInfo;
 import org.example.entity.pojo.StationInfo;
 import org.example.mapper.StationInfoMapper;
 import org.example.service.StationInfoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.example.util.CSVParse.getCsvDataMethod3;
 import static org.example.util.JsonParse.getJsonString;
@@ -50,5 +54,25 @@ public class StationInfoServiceImpl implements StationInfoService {
             stationInfoMapper.insertAirStationInfo(csvDataMethod3.get(i));
         }
 //        System.err.println(csvDataMethod3);
+    }
+
+    @Override
+    public ResponseResult findRecommendStationsByName(String stationName,Integer isAirStation) {
+        if(isAirStation==0){
+            stationName = stationName.equals("") ? "北京%": stationName+"%";
+        }
+        else {
+            stationName = stationName.equals("") ? "ZS%": stationName+"%";
+        }
+
+        List<StationInfo> recommendStations = stationInfoMapper.findRecommendStationByName(stationName,isAirStation);
+
+        List<RecommendStationInfoDto> recommendStationInfoDtos = recommendStations.stream().map(recommendStation ->{
+            RecommendStationInfoDto recommendStationInfoDto = new RecommendStationInfoDto();
+            recommendStationInfoDto.setValue(isAirStation==0?recommendStation.getStationName(): recommendStation.getICAO());
+            recommendStationInfoDto.setGCity(recommendStation.getGCity());
+            return recommendStationInfoDto;
+        }).collect(Collectors.toList());
+        return ResponseResult.SuccessResult(recommendStationInfoDtos);
     }
 }

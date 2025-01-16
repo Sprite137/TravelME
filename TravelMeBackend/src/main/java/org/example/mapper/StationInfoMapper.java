@@ -17,4 +17,6 @@ public interface StationInfoMapper {
     void insertStationInfo(StationInfo stationInfo);
 
     void insertAirStationInfo(StationInfo stationInfo);
+
+    List<StationInfo> findRecommendStationByName(String station,Integer isAirStation);
 }

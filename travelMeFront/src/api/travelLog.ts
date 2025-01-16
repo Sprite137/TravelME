@@ -1,14 +1,23 @@
-import { get } from '../utils/request';
+import { get,post } from '../utils/request';
 
 
 const api = {
-    test: '/travelLog/test',
-    homeBooks: '/book/homeBooks',
-    getBookDetail:"/book/bookDetail"
+    queryTravelLogs: '/travelLog',
+    addTravelLog:'/travelLog/addTravelLog'
 }
 
-const test = (params: any) => {
-    return get(api.test, params).then((res: any) => {
+const queryTravelLogs = (params: any) => {
+    return get(api.queryTravelLogs, params).then((res: any) => {
+        if (res.code === 200) {
+            return Promise.resolve(res);
+        }
+        return Promise.resolve(res);
+    })
+    
+}
+
+const addTravelLog = (params: any) => {
+    return post(api.addTravelLog, params).then((res: any) => {
         if (res.code === 200) {
             return Promise.resolve(res);
         }
@@ -18,5 +27,5 @@ const test = (params: any) => {
 }
 
 export {
-    test
+    addTravelLog,queryTravelLogs
 }

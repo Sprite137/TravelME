@@ -33,4 +33,13 @@
             END
         ) = #{station};
     </select>
+
+    <select id="findRecommendStationByName" resultMap="BaseResultMap">
+        select * from station_info WHERE (
+        CASE
+        WHEN is_airStation = 0 THEN station_name
+        ELSE ICAO
+        END
+        ) like #{station};
+    </select>
 </mapper>

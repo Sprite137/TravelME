@@ -1,11 +1,12 @@
 
 <template>
-    <div id="container"></div>
-    <!-- <div>
-      <div>出发站：南京</div>
-      <div>终点站：北京</div>
-      <div>出行时间：2024-12-17</div>
-    </div> -->
+  <div class="menu">
+      <el-icon class = "plusIcon" @click="handleAddTravelLog"><Plus /></el-icon>
+        
+      <!-- <el-icon><User /></el-icon> -->
+  </div>
+    
+  <div id="container"></div>
 </template>
 
 
@@ -13,8 +14,16 @@
   import { onMounted, onUnmounted } from "vue";
   import AMapLoader from "@amap/amap-jsapi-loader";
   import GDKey from "../assets/json/GDKey.json"
-  import {test} from "../api/travelLog"
-  import {TravelLog} from "../base"
+  import {queryTravelLogs} from "../api/travelLog"    
+  import {
+      ArrowLeft,
+      ArrowRight,
+      Delete,
+      Edit,
+      Share,
+  } from '@element-plus/icons-vue'
+  import router from "../router";
+  import { Plus } from "@element-plus/icons-vue";
 
   let map = null;
   var infoWindow;
@@ -140,12 +149,11 @@
       var points = new Array();
       var isAirPlanes = new Array();
       var travelLogs = new Array();
-      {
-            
-          }
+
+
       async function testAxios() {
         try{
-            const response = await test();
+            const response = await queryTravelLogs({userId:"1"});
             for (const key in response.data){
               var point = new Array();
               point[0] = Number(response.data[key].startStationLng);
@@ -212,7 +220,7 @@
 
           bezierCurve.on("mouseover",showTravelLog)
           bezierCurve.on("mouseout",hideTravelLog)
-          
+
           bezierCurve.setExtData(travelLogs[i])
 
           map.add(bezierCurve);
@@ -254,9 +262,14 @@
       .catch((e) => {
         console.log(e);
       });
+
+
   });
 
   
+  function handleAddTravelLog() {
+      router.push("/addLog")
+    };
 
   onUnmounted(() => {
     map?.destroy();
@@ -271,11 +284,36 @@
     position: absolute;
     margin: auto;
     right: 0px;
-    top: 0px;
+    top: 3%;
     width: 100%;
-    height: 100%;
+    height: 97%;
     z-index: 10;
     
+  }
+
+  .menu {
+    position: absolute;
+    top:0px;
+    right: 0px;
+    width: 100%;
+    height: 3%;
+    background-color:blanchedalmond;
+    
+  }
+
+  /* .addIcon{
+    background-color:blueviolet;
+  } */
+
+  .menu .el-icon {
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .menu .plusIcon{
+    position: absolute;
+    right: 10px;
+    top: 0px;
   }
 
 </style>

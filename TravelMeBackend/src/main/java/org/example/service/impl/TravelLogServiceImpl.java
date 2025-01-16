@@ -4,6 +4,7 @@ import org.example.entity.ResponseResult;
 import org.example.entity.dto.TravelLatLngDto;
 import org.example.entity.pojo.StationInfo;
 import org.example.entity.pojo.TravelLog;
+import org.example.entity.vo.TravelLogVo;
 import org.example.mapper.StationInfoMapper;
 import org.example.mapper.TravelLogMapper;
 import org.example.service.StationInfoService;
@@ -52,5 +53,11 @@ public class TravelLogServiceImpl implements TravelLogService {
         }).collect(Collectors.toList());
 
         return ResponseResult.SuccessResult(travelLatLngDtos);
+    }
+
+    @Override
+    public ResponseResult addTravelLog(TravelLogVo travelLogVo) {
+        travelLogMapper.insertTravelLog(travelLogVo);
+        return ResponseResult.SuccessResult();
     }
 }

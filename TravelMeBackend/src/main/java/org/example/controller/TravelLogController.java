@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.entity.ResponseResult;
+import org.example.entity.vo.TravelLogVo;
 import org.example.service.TravelLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +20,19 @@ public class TravelLogController {
     private TravelLogService travelLogService;
 
 
-    @GetMapping("/test")
-    public ResponseResult getLog(){
-        return travelLogService.getLogLatLng("1");
+    @GetMapping("/queryTravelLogs")
+    public ResponseResult getLog(@RequestParam("userId") String userId){
+        return travelLogService.getLogLatLng(userId);
     }
 
     @GetMapping()
     public ResponseResult getLogLatLng(@RequestParam("userId") String userId){
         return travelLogService.getLogLatLng(userId);
+    }
+
+    @PostMapping("/addTravelLog")
+    public ResponseResult addTravelLog(@RequestBody TravelLogVo travelLogVo){
+        return travelLogService.addTravelLog(travelLogVo);
     }
 
 }

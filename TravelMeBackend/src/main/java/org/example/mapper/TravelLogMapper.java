@@ -2,6 +2,7 @@ package org.example.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.example.entity.pojo.TravelLog;
+import org.example.entity.vo.TravelLogVo;
 
 import java.util.List;
 
@@ -14,5 +15,7 @@ import java.util.List;
 public interface TravelLogMapper {
 
     List<TravelLog> getTravelLogsByUserId(String userId);
+
+    void insertTravelLog(TravelLogVo travelLogVo);
 
 }

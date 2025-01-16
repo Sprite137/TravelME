@@ -10,4 +10,6 @@ public interface StationInfoService {
     void insertStationInfo();
 
     void insertAirStationInfo();
+
+    ResponseResult findRecommendStationsByName(String stationName, Integer isAirStation);
 }
